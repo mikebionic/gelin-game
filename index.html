@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gelin game</title>
+<link rel="stylesheet" href="css/common.css">
+<style>
+  .hero{display:flex;gap:28px;align-items:center;flex-wrap:wrap;justify-content:center;margin:10px 0 30px}
+  .hero img{width:200px;filter:drop-shadow(0 12px 24px rgba(0,0,0,.5))}
+  .hero .t{max-width:460px}
+  .hero h1{font-size:44px;margin:.1em 0}
+  .hero p{color:#e8d6ae;line-height:1.5}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+  .card{display:flex;flex-direction:column;min-height:260px;cursor:pointer;text-decoration:none;color:inherit;transition:transform .12s}
+  .card:hover{transform:translateY(-4px)}
+  .card .num{font-family:Georgia,serif;font-size:14px;color:var(--gold);letter-spacing:3px}
+  .card h2{margin:.2em 0 .4em;font-size:26px}
+  .card p{color:#e5d2ab;line-height:1.5;flex:1}
+  .card .go{align-self:flex-start;margin-top:10px}
+  .emoji{font-size:34px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <img src="assets/sprites/girl_portrait.png" alt="Gelin">
+    <div class="t">
+      <div class="num" style="color:var(--gold);letter-spacing:4px">GELIN GAME</div>
+      <h1 class="title-gold">Gelin game</h1>
+      <p>Две маленькие игры. В первой найди загадочную <b>S</b> среди десяти девушек по её привычкам. Во второй помоги девушке в красном сбежать со свадьбы, отбиваясь от джигитов и фотографов.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <a class="card panel" href="game1.html">
+      <div class="num">ИГРА ПЕРВАЯ</div>
+      <h2 class="title-gold"><span class="emoji">🔎</span> Найди S</h2>
+      <p>Десять одинаковых девушек. Одна из них S. У тебя есть досье её привычек: над чем смеётся, что ест, какой любит цвет, число и игрушку. Проводи испытания, смотри, кто как реагирует, и вычисли S.</p>
+      <span class="go btn">Играть →</span>
+    </a>
+
+    <a class="card panel" href="game2.html">
+      <div class="num">ИГРА ВТОРАЯ</div>
+      <h2 class="title-gold"><span class="emoji">🏃‍♀️</span> Побег от свадьбы</h2>
+      <p>Девушка в красном убегает со свадьбы. Три джигита ловят её, фотографы крадут кадры, а украшенные машины толкают в западню. Бей врагов, уворачивайся и выживи.</p>
+      <span class="go btn red">Играть →</span>
+    </a>
+  </div>
+</div>
+</body>
+</html>

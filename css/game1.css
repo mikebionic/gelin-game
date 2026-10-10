@@ -1,0 +1,112 @@
+/* ===== Игра 1: Найди S ===== */
+.layout{display:grid;grid-template-columns:1fr;gap:18px}
+
+/* Досье S (сворачиваемое) */
+.dossier{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.dossier img{width:92px;border-radius:12px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5))}
+.dossier h2{margin:0 0 6px}
+#dossier summary{cursor:pointer;display:inline-block;color:var(--gold);font-weight:700;
+   background:rgba(0,0,0,.25);border:1px solid var(--gold-d);border-radius:999px;padding:7px 14px;list-style:none}
+#dossier summary::-webkit-details-marker{display:none}
+#dossier[open] summary{margin-bottom:10px}
+.facts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 18px}
+.facts li{display:flex;gap:8px;align-items:center;font-size:14.5px;color:#f0e0b6}
+.facts li b{color:var(--gold)}
+
+/* Сцена с девушками: 2 ряда по 5, крупнее */
+.stage{display:grid;grid-template-columns:repeat(5,1fr);gap:8px 4px;background:
+   linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.33));
+   border-radius:14px;padding:20px 10px 12px}
+.girl{position:relative;padding-top:46px;display:flex;flex-direction:column;align-items:center;cursor:default;
+   transition:transform .12s}
+.girl .sprite{width:104px;height:124px;object-fit:contain;filter:drop-shadow(0 6px 8px rgba(0,0,0,.4));
+   transition:transform .15s}
+.girl .label{font-size:13px;color:#e9d7ac;margin-top:2px;background:rgba(0,0,0,.35);
+   border:1px solid var(--gold-d);border-radius:999px;padding:2px 11px}
+.girl.react .sprite{animation:hop .5s ease}
+@keyframes hop{0%,100%{transform:translateY(0)}30%{transform:translateY(-18px) rotate(-4deg)}60%{transform:translateY(-5px) rotate(3deg)}}
+@media(max-width:640px){
+  .stage{grid-template-columns:repeat(5,1fr)}
+  .girl{padding-top:40px}
+  .girl .sprite{width:62px;height:76px}
+}
+
+/* Пузырь реакции (над иконками) */
+.bubble{position:absolute;top:-10px;left:50%;
+   transform:translateX(-50%) translateY(-100%);
+   background:#fff;color:#20111a;border-radius:12px;padding:3px 8px;font-size:20px;
+   box-shadow:0 4px 10px rgba(0,0,0,.4);white-space:nowrap;pointer-events:none;z-index:3;
+   opacity:0;animation:pop .4s ease forwards}
+.bubble::after{content:"";position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);
+   border:6px solid transparent;border-top-color:#fff}
+@keyframes pop{from{opacity:0;transform:translateX(-50%) translateY(-80%) scale(.6)}
+   to{opacity:1;transform:translateX(-50%) translateY(-100%) scale(1)}}
+
+/* Иконки «взятого» над головой, выше и крупнее */
+.picks{position:absolute;top:2px;left:50%;transform:translateX(-50%);display:flex;gap:3px;flex-wrap:wrap;
+   width:132px;justify-content:center;pointer-events:none;z-index:2}
+.picks .pick{width:32px;height:32px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;
+   font-size:20px;box-shadow:0 2px 6px rgba(0,0,0,.4);overflow:hidden;border:1px solid rgba(0,0,0,.1)}
+.picks .pick img{width:28px;height:28px;object-fit:contain}
+.picks .dot{width:26px;height:26px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 5px rgba(0,0,0,.45)}
+
+/* режим обвинения */
+.stage.accuse .girl{cursor:pointer}
+.stage.accuse .girl:hover{transform:translateY(-6px)}
+.stage.accuse .girl:hover .sprite{transform:scale(1.08);filter:drop-shadow(0 0 10px var(--gold))}
+
+/* Испытания */
+.challenge-tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tab{padding:9px 14px;border-radius:10px;border:1px solid var(--gold-d);background:rgba(0,0,0,.25);
+   color:var(--cream);cursor:pointer;font-weight:600;font-size:14px}
+.tab.active{background:linear-gradient(180deg,var(--gold),var(--gold-d));color:var(--ink)}
+.challenge-body{margin-top:14px}
+.ch{display:none}
+.ch.active{display:block}
+.ch h3{margin:0 0 8px}
+.ch .hint{font-size:13px;color:#d8c49a;margin:2px 0 12px}
+
+/* сетки выбора (продукты/цвета/игрушки) */
+.grid-pick{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.opt{position:relative;width:88px;border:2px solid transparent;border-radius:12px;background:rgba(255,255,255,.06);
+   padding:8px 6px 6px;text-align:center;cursor:pointer;user-select:none;transition:border-color .1s,background .1s}
+.opt:hover{background:rgba(255,255,255,.12)}
+.opt.on{border-color:var(--gold);background:rgba(227,189,93,.18)}
+.opt .ic{height:52px;display:flex;align-items:center;justify-content:center;font-size:34px}
+.opt .ic img{max-height:52px;max-width:72px;object-fit:contain}
+.opt .nm{font-size:12px;margin-top:4px;color:#eadcb6}
+.opt .ck{position:absolute;top:4px;right:6px;font-size:14px;opacity:0;color:var(--gold)}
+.opt.on .ck{opacity:1}
+.swatch{width:40px;height:40px;border-radius:8px;border:2px solid rgba(255,255,255,.5);margin:0 auto}
+
+.row-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+input[type=text],input[type=number]{background:rgba(0,0,0,.3);border:1px solid var(--gold-d);color:var(--cream);
+   border-radius:8px;padding:10px 12px;font-size:15px}
+input[type=number]{width:90px}
+
+/* Блокнот-дедукция (компактный, иконки в шапке) */
+.notebook{overflow:auto}
+.nb-title{cursor:pointer;font-family:Georgia,serif;font-size:19px;color:var(--gold);list-style:none;margin-bottom:6px}
+.nb-title::-webkit-details-marker{display:none}
+.nb-legend{margin:.2em 0 10px;color:#cdbb92;font-size:12.5px}
+table.nb{border-collapse:collapse;width:100%;font-size:15px}
+table.nb th,table.nb td{border:1px solid rgba(227,189,93,.22);padding:6px 4px;text-align:center}
+table.nb th{font-size:19px;background:#3a1c2c;cursor:help}
+table.nb th:first-child{font-size:13px;color:var(--gold)}
+table.nb td.gname{font-weight:700;color:#ecdcb2}
+.mark{font-weight:800;font-size:17px}
+.mark.yes{color:#5fd08a}
+.mark.no{color:#e0603f}
+.mark.q{color:#6a5c48}
+tr.suspect td{background:rgba(227,189,93,.12)}
+tr.dead td{opacity:.42}
+tr.dead td.gname{text-decoration:line-through}
+
+/* Оверлей результата */
+.overlay{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
+   background:rgba(10,4,8,.82);padding:20px}
+.overlay .box{max-width:460px;text-align:center}
+.overlay img{width:150px;border-radius:14px;margin:6px 0 10px;filter:drop-shadow(0 10px 20px rgba(0,0,0,.6))}
+.overlay h2{font-size:30px;margin:.1em 0}
+.win h2{color:#7ee0a6}
+.lose h2{color:#ff8e73}

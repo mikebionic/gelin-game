@@ -1,0 +1,47 @@
+/* ===== Игра 2: Побег от свадьбы ===== */
+.game-shell{max-width:980px;margin:0 auto}
+.stage2{position:relative;width:100%;aspect-ratio:960/600;background:#111;border:3px solid var(--gold-d);
+  border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+#gcanvas{position:absolute;inset:0;width:100%;height:100%;display:block;image-rendering:auto}
+
+/* HUD */
+.hud{position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:flex-start;
+  padding:10px 14px;pointer-events:none;font-weight:700;text-shadow:0 2px 4px rgba(0,0,0,.8)}
+.hud .lives{font-size:24px;letter-spacing:2px}
+.hud .stat{background:rgba(0,0,0,.45);border:1px solid var(--gold-d);border-radius:999px;padding:5px 12px;font-size:14px;color:var(--cream)}
+.hud .right{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+
+/* Оверлеи (старт / конец) */
+.screen{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,4,8,.8);
+  z-index:5;padding:18px;text-align:center}
+.screen .card{max-width:520px}
+.screen h2{font-size:30px;margin:.1em 0}
+.screen img{width:130px;border-radius:12px;margin:8px 0;filter:drop-shadow(0 10px 20px rgba(0,0,0,.6))}
+.screen .keys{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:14px 0;color:#e8d6ae;font-size:14px}
+.screen .keys b{color:var(--gold)}
+.win h2{color:#7ee0a6}.lose h2{color:#ff8e73}
+
+/* Кнопки управления */
+.controls{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;
+  touch-action:none;user-select:none;-webkit-user-select:none}
+.dpad{display:grid;grid-template-columns:repeat(3,56px);grid-template-rows:repeat(3,56px);gap:6px}
+.dpad .cbtn{grid-column:auto}
+.dpad .up{grid-area:1/2}.dpad .left{grid-area:2/1}.dpad .right2{grid-area:2/3}.dpad .down{grid-area:3/2}
+.actions{display:flex;gap:12px}
+.cbtn{display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#5a2638,#3a1626);
+  color:var(--cream);border:2px solid var(--gold-d);border-radius:14px;font-size:20px;font-weight:800;
+  box-shadow:0 4px 0 #2a0f1a;cursor:pointer}
+.cbtn:active,.cbtn.pressed{transform:translateY(3px);box-shadow:0 1px 0 #2a0f1a;background:linear-gradient(180deg,#6e3048,#4a1d31)}
+.actions .cbtn{width:84px;height:84px;flex-direction:column;gap:2px;font-size:15px}
+.actions .cbtn .big{font-size:26px}
+.actions .punch{background:linear-gradient(180deg,#b5452f,#7e2a1b);border-color:#d98a6a}
+.actions .superb{background:linear-gradient(180deg,#3aa0b5,#1b5e7e);border-color:#6ad9d0}
+.hud .stat#superStat.ready{background:linear-gradient(180deg,#2aa198,#1b6e66);border-color:#7ee0a6;
+  color:#eafff8;animation:superPulse .8s infinite alternate}
+@keyframes superPulse{from{box-shadow:0 0 0 rgba(126,224,166,0)}to{box-shadow:0 0 14px rgba(126,224,166,.8)}}
+.actions .jump{background:linear-gradient(180deg,#2f7bb5,#1b4e7e);border-color:#6aa9d9}
+.hint2{text-align:center;color:#cdbb92;font-size:13px;margin-top:8px}
+@media(max-width:560px){
+  .dpad{grid-template-columns:repeat(3,48px);grid-template-rows:repeat(3,48px)}
+  .actions .cbtn{width:72px;height:72px}
+}

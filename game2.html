@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Побег от свадьбы</title>
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/game2.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <a class="btn ghost" href="index.html">← Меню</a>
+      <h2 class="title-gold" style="margin:0">🏃‍♀️ Побег от свадьбы</h2>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="btn ghost" id="musicBtn" title="Музыка вкл/выкл">🔊</button>
+      <button class="btn ghost" id="pauseBtn">Пауза</button>
+      <button class="btn red" id="restart2">Заново</button>
+    </div>
+  </div>
+
+  <div class="game-shell">
+    <div class="stage2">
+      <canvas id="gcanvas" width="960" height="600"></canvas>
+
+      <div class="hud">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div class="lives" id="lives">❤️❤️❤️</div>
+          <div class="stat">Очки: <b id="score">0</b></div>
+          <div class="stat" id="superStat">Супер: <b id="super">0%</b></div>
+        </div>
+        <div class="right">
+          <div class="stat">Джигиты: <b id="jleft">3</b></div>
+          <div class="stat">Фотографы: <b id="pleft">10</b></div>
+          <div class="stat">Мулы: <b id="mleft">4</b></div>
+        </div>
+      </div>
+
+      <!-- Старт -->
+      <div class="screen" id="startScreen">
+        <div class="panel card">
+          <h2 class="title-gold">Побег от свадьбы</h2>
+          <img src="assets/sprites/girl_idle.png" alt="">
+          <p style="color:#e8d6ae">Ты играешь за девушку в красном. Сбеги со свадьбы: раскидай <b>3 джигитов</b>, <b>10 фотографов</b> и <b>4 мул</b>. Джигит догонит: минус жизнь. Фотограф щёлкнет: минус жизнь (уйди из кадра или ударь его). <b>Мула</b> читает молитву: пускает прямой <b>луч</b> в твою сторону (отойди вбок от линии) или садится и делает <b>круг</b> (перепрыгни его). Машины сигналят и толкают в западню, уворачивайся или прыгай.</p>
+          <div class="keys">
+            <span><b>WASD / стрелки</b>: движение</span>
+            <span><b>J / Пробел</b>: удар (жми подряд: рука-рука-нога)</span>
+            <span><b>K / Shift</b>: прыжок</span>
+            <span><b>Enter</b>: супер-удар (когда шкала полна)</span>
+          </div>
+          <p style="color:#cdbb92;font-size:13px;margin:4px 0 0">Бей и убивай врагов: копится <b>Супер</b> (Enter) — заморозка всех и мгновенное убийство рядом. С врагов падают бонусы: 🐌 замедление, ⚡ быстрые удары, ❤️ жизнь.</p>
+          <button class="btn" id="startBtn">Начать побег</button>
+        </div>
+      </div>
+
+      <!-- Конец -->
+      <div class="screen hidden" id="endScreen"><div class="panel card" id="endCard"></div></div>
+    </div>
+
+    <!-- Экранное управление -->
+    <div class="controls">
+      <div class="dpad">
+        <div class="cbtn up"     data-k="up">▲</div>
+        <div class="cbtn left"   data-k="left">◀</div>
+        <div class="cbtn right2" data-k="right">▶</div>
+        <div class="cbtn down"   data-k="down">▼</div>
+      </div>
+      <div class="actions">
+        <div class="cbtn superb" data-k="super"><span class="big">✦</span>Супер</div>
+        <div class="cbtn jump" data-k="jump"><span class="big">⤴</span>Прыжок</div>
+        <div class="cbtn punch" data-k="attack"><span class="big">👊</span>Удар</div>
+      </div>
+    </div>
+    <div class="hint2">Бей подряд: рука, рука, <b>нога</b> (сильнее). Прыжок спасает от машин и круга мулы, от луча уходи вбок. Полная шкала <b>Супер</b> — жми <b>Enter</b>: заморозка + мгновенное убийство рядом. Лови бонусы 🐌⚡❤️.</div>
+  </div>
+</div>
+
+<script src="js/game2.js"></script>
+</body>
+</html>

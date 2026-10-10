@@ -1,0 +1,75 @@
+/* ===== Общая восточная тема для обеих игр ===== */
+:root{
+  --maroon:#6e1a2e;
+  --maroon-d:#4a0f1f;
+  --maroon-l:#8d2740;
+  --gold:#e3bd5d;
+  --gold-d:#b8902f;
+  --cream:#f4e7c6;
+  --ink:#20111a;
+  --bg0:#2a1420;
+  --bg1:#1b0d16;
+  --teal:#2aa198;
+  --shadow:0 10px 30px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{
+  font-family:"Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;
+  color:var(--cream);
+  background:
+    radial-gradient(1200px 600px at 50% -10%,#3a1c2c 0%,transparent 60%),
+    radial-gradient(900px 500px at 50% 120%,#3a1c2c 0%,transparent 60%),
+    linear-gradient(160deg,var(--bg0),var(--bg1));
+  background-attachment:fixed;
+  min-height:100%;
+}
+/* тонкий золотой «орнамент» через повторяющийся градиент */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.06;
+  background-image:
+    repeating-linear-gradient(45deg,var(--gold) 0 2px,transparent 2px 22px),
+    repeating-linear-gradient(-45deg,var(--gold) 0 2px,transparent 2px 22px);
+}
+.wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:24px 18px 60px}
+
+h1,h2,h3{font-family:"Georgia","Times New Roman",serif;letter-spacing:.5px}
+.title-gold{
+  color:var(--gold);
+  text-shadow:0 2px 0 var(--maroon-d),0 0 18px rgba(227,189,93,.35);
+}
+a{color:var(--gold)}
+
+.btn{
+  display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+  font:600 16px/1 "Segoe UI",sans-serif;
+  color:var(--ink);background:linear-gradient(180deg,var(--gold),var(--gold-d));
+  border:2px solid #7a5c16;border-radius:12px;padding:12px 20px;
+  box-shadow:0 4px 0 #6b4f12,0 8px 18px rgba(0,0,0,.35);
+  transition:transform .08s ease,box-shadow .08s ease;
+  text-decoration:none;user-select:none;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #6b4f12}
+.btn.ghost{
+  background:transparent;color:var(--gold);border-color:var(--gold-d);
+  box-shadow:none;
+}
+.btn.red{background:linear-gradient(180deg,var(--maroon-l),var(--maroon));color:var(--cream);border-color:#3d0c18;box-shadow:0 4px 0 #350914,0 8px 18px rgba(0,0,0,.35)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+
+.panel{
+  background:linear-gradient(180deg,rgba(60,28,42,.92),rgba(40,18,30,.92));
+  border:2px solid var(--gold-d);border-radius:18px;padding:18px 20px;
+  box-shadow:var(--shadow);position:relative;
+}
+.panel::after{/* внутренняя золотая рамка */
+  content:"";position:absolute;inset:6px;border:1px solid rgba(227,189,93,.25);
+  border-radius:12px;pointer-events:none;
+}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.topbar .brand{display:flex;align-items:center;gap:12px}
+.pill{background:rgba(0,0,0,.3);border:1px solid var(--gold-d);border-radius:999px;padding:6px 14px;font-size:14px}
+
+.hidden{display:none !important}
