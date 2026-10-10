@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Найди S · Gelin game</title>
+<title>Найди Gelin · Gelin game</title>
 <link rel="stylesheet" href="css/common.css">
 <link rel="stylesheet" href="css/game1.css">
 </head>
@@ -12,34 +12,22 @@
   <div class="topbar">
     <div class="brand">
       <a class="btn ghost" href="index.html">← Меню</a>
-      <h2 class="title-gold" style="margin:0">🔎 Найди S</h2>
+      <h2 class="title-gold" style="margin:0">🔎 Найди Gelin</h2>
     </div>
     <div style="display:flex;gap:8px;align-items:center">
       <span class="pill">Попытки: <b id="attempts">2</b></span>
-      <button class="btn red" id="accuseBtn">Назвать S</button>
+      <button class="btn red" id="accuseBtn">Назвать Gelin</button>
       <button class="btn ghost" id="restartBtn">Заново</button>
     </div>
   </div>
 
   <div class="layout">
-    <!-- Досье (свёрнуто) -->
+    <!-- Интро без примет -->
     <div class="panel dossier">
-      <img src="assets/sprites/girl_portrait.png" alt="S">
+      <img src="assets/sprites/girl_portrait.png" alt="Gelin">
       <div style="flex:1;min-width:260px">
-        <h2 class="title-gold" style="margin:0 0 4px">Найди S</h2>
-        <p style="margin:.2em 0 10px;color:#e4d2aa">S прячется среди десяти девушек. Проводи испытания и найди ту, что совпадает со всеми приметами. Подсказку можно открыть ниже, если нужно.</p>
-        <details id="dossier">
-          <summary>📋 Открыть приметы S</summary>
-          <ul class="facts">
-            <li>😂 <span>смеётся над числом <b>«250»</b></span></li>
-            <li>🍞 <span>берёт <b>чёрный</b> хлеб, но не белый</span></li>
-            <li>🧂 <span>никогда не берёт <b>соль</b></span></li>
-            <li>🫒 <span>не берёт <b>масло</b></span></li>
-            <li>🦈 <span>обожает плюшевую <b>акулу</b></span></li>
-            <li>🔢 <span>выбирает число <b>11</b></span></li>
-            <li>🎨 <span>любимый цвет <b>бирюзовый</b></span></li>
-          </ul>
-        </details>
+        <h2 class="title-gold" style="margin:0 0 4px">Найди Gelin</h2>
+        <p style="margin:.2em 0 0;color:#e4d2aa">Одна из десяти девушек — Gelin, но кто именно, заранее неизвестно. Проводи испытания: девушки реагируют по-своему. В блокноте каждое испытание отмечается <span class="mark yes">✓</span> (ведёт себя как Gelin) или <span class="mark no">✗</span>. Gelin — та, у кого <b>везде ✓</b>. На обвинение есть 2 попытки.</p>
       </div>
     </div>
 
@@ -56,7 +44,7 @@
     <!-- Блокнот -->
     <details class="panel notebook" open>
       <summary class="nb-title">📓 Блокнот наблюдений</summary>
-      <p class="nb-legend"><span class="mark yes">✓</span> как S · <span class="mark no">✗</span> точно не S · <span class="mark q">·</span> ещё не проверено · 👑 единственная подозреваемая. Наведи курсор на иконку в шапке, чтобы увидеть примету.</p>
+      <p class="nb-legend"><span class="mark yes">✓</span> ведёт себя как Gelin · <span class="mark no">✗</span> точно не Gelin · <span class="mark q">·</span> ещё не проверено · 👑 единственная подозреваемая. Столбцы — испытания (наведи курсор, чтобы увидеть какое).</p>
       <div id="nbWrap"></div>
     </details>
   </div>

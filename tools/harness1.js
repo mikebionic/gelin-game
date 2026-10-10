@@ -90,11 +90,11 @@ try{
   document.querySelector('.girl[data-i="'+S+'"]').listeners.click();
   result.over=st.over;
   result.overlayShown=!nodes['overlay']._has('hidden');
-  result.winText=/раскрыл S/.test(nodes['overlayBox'].innerHTML||'');
+  result.winText=/нашёл Gelin/.test(nodes['overlayBox'].innerHTML||'');
 }catch(e){ err=e; }
 
 console.log('S под индексом:', result.S);
-console.log('подозреваемые (все ✓):', result.suspects, '->', JSON.stringify(result.suspects)===JSON.stringify([result.S])?'ровно S ✔':'ОШИБКА');
+console.log('подозреваемые (все ✓):', result.suspects, '->', JSON.stringify(result.suspects)===JSON.stringify([result.S])?'ровно Gelin ✔':'ОШИБКА');
 console.log('попыток после неверного обвинения (было 2):', result.attemptsAfterWrong);
 console.log('игра завершена:', result.over, '| оверлей показан:', result.overlayShown, '| текст победы:', result.winText);
 if(err){ console.error('RUNTIME ERROR:', err&&err.stack||err); process.exit(1); }

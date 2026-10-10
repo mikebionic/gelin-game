@@ -1,8 +1,8 @@
-/* ===================== Игра 1: «Найди S» =====================
-   10 девушек в парандже, одна из них S. У игрока есть досье
-   из 7 примет. Испытания раскрывают поведение каждой девушки,
-   блокнот фиксирует совпадения. Генерация гарантирует, что ровно
-   одна девушка (S) совпадает со всеми семью приметами.
+/* ===================== Игра 1: «Найди Gelin» =====================
+   10 девушек в парандже, одна из них Gelin. У Gelin 7 скрытых привычек
+   (игроку НЕ показываются). Испытания раскрывают поведение девушек,
+   блокнот отмечает ✓/✗ по каждому испытанию. Генерация гарантирует, что
+   ровно одна девушка (Gelin) получает ✓ во всех испытаниях.
    ============================================================= */
 
 // ---------- данные ----------
@@ -100,15 +100,15 @@ const FLAVOR_WORDS = [
   ['chuuk','чуук'],
 ];
 
-// 7 признаков (колонки блокнота). flag=true => ведёт себя как S.
-const TRAITS = [
-  {key:'laughs250', col:'Смеётся над «250»',        icon:'😂'},
-  {key:'breadRule', col:'Чёрный хлеб, не белый',    icon:'🍞'},
-  {key:'refusesSalt',col:'Не берёт соль',           icon:'🧂'},
-  {key:'refusesOil', col:'Не берёт масло',          icon:'🫒'},
-  {key:'takesShark', col:'Берёт акулу',             icon:'🦈'},
-  {key:'picksNum11', col:'Выбирает число 11',       icon:'🔢'},
-  {key:'favTeal',    col:'Любит бирюзовый',         icon:'🎨'},
+// 7 скрытых признаков Gelin (игроку НЕ показываются — чтобы не палить информацию)
+const HTRAITS = ['laughs250','breadRule','refusesSalt','refusesOil','takesShark','picksNum11','favTeal'];
+// 5 колонок блокнота = по одному на испытание (нейтральные, без раскрытия приметы)
+const CHALLENGES = [
+  {key:'text',     icon:'💬', col:'Текст'},
+  {key:'products', icon:'🍽️', col:'Продукты'},
+  {key:'colors',   icon:'🎨', col:'Цвета'},
+  {key:'numbers',  icon:'🔢', col:'Числа'},
+  {key:'toys',     icon:'🧸', col:'Игрушки'},
 ];
 
 // ---------- утилиты ----------
@@ -133,7 +133,7 @@ function makeFlavor(t){
   if(t.takesShark) toys.push('shark');
   // продукты
   let prods = sample(NEUTRAL_PRODUCTS, ri(3,5));
-  if(t.breadRule){ prods.push('black_bread'); }               // как S: чёрный, без белого
+  if(t.breadRule){ prods.push('black_bread'); }               // как Gelin: чёрный, без белого
   else { prods.push('white_bread'); if(rb()) prods.push('black_bread'); }
   if(!t.refusesSalt) prods.push('salt');
   if(!t.refusesOil)  prods.push('oil');
@@ -151,12 +151,12 @@ function makeGirl(traits){
 
 function genGirls(){
   const N=10, s=ri(0,N-1), girls=[];
-  const sTraits={laughs250:true,breadRule:true,refusesSalt:true,refusesOil:true,takesShark:true,picksNum11:true,favTeal:true};
+  const gelinTraits={laughs250:true,breadRule:true,refusesSalt:true,refusesOil:true,takesShark:true,picksNum11:true,favTeal:true};
   for(let i=0;i<N;i++){
-    if(i===s){ girls.push(makeGirl(sTraits)); continue; }
-    let t={}; TRAITS.forEach(tr=>t[tr.key]=rb());
-    // не должна совпадать с S по всем 7 признакам
-    if(TRAITS.every(tr=>t[tr.key])){ t[TRAITS[ri(0,6)].key]=false; }
+    if(i===s){ girls.push(makeGirl(gelinTraits)); continue; }
+    let t={}; HTRAITS.forEach(k=>t[k]=rb());
+    // не должна совпадать с Gelin по всем 7 признакам
+    if(HTRAITS.every(k=>t[k])){ t[HTRAITS[ri(0,6)]]=false; }
     girls.push(makeGirl(t));
   }
   return {girls, s};
@@ -166,12 +166,12 @@ function newGame(){
   const g=genGirls();
   state={
     girls:g.girls, s:g.s, attempts:2, accusing:false, over:false,
-    obs: g.girls.map(()=>({laughs250:'q',breadRule:'q',refusesSalt:'q',refusesOil:'q',takesShark:'q',picksNum11:'q',favTeal:'q'})),
+    obs: g.girls.map(()=>({text:'q',products:'q',colors:'q',numbers:'q',toys:'q'})),
     picks: g.girls.map(()=>[]),
   };
   buildStage(); buildNotebook(); setActiveTab('products');
   document.getElementById('attempts').textContent=state.attempts;
-  hint('Запускай испытания слева. Когда будешь уверен, жми «Назвать S».');
+  hint('Проводи испытания слева. Блокнот отметит ✓/✗. Gelin та, у кого везде ✓.');
   hideOverlay();
 }
 
@@ -224,9 +224,22 @@ function showReactions(arr){
 }
 
 // ---------- запись в блокнот ----------
-function record(col){
+// col — колонка-испытание, fn(g) => ведёт ли девушка себя как Gelin
+function recordChallenge(col, fn){
+  state.girls.forEach((g,i)=>{ state.obs[i][col] = fn(g) ? 'yes' : 'no'; });
+  buildNotebook();
+}
+// продукты: Gelin берёт чёрный (не белый), не берёт соль и масло
+function recordProducts(onTable){
+  const bread = onTable.has('white_bread') && onTable.has('black_bread');
+  const salt = onTable.has('salt'), oil = onTable.has('oil');
+  if(!bread && !salt && !oil) return;
   state.girls.forEach((g,i)=>{
-    state.obs[i][col] = g[col] ? 'yes' : 'no';
+    let ok=true;
+    if(bread) ok = ok && g.breadRule;
+    if(salt)  ok = ok && g.refusesSalt;
+    if(oil)   ok = ok && g.refusesOil;
+    state.obs[i].products = ok ? 'yes' : 'no';
   });
   buildNotebook();
 }
@@ -283,9 +296,7 @@ CH.products=()=>{
       return {react:got.length>0, picks, bubble: got.length?null:'🤔'};
     });
     showReactions(react);
-    if(onTable.has('white_bread')&&onTable.has('black_bread')) record('breadRule');
-    if(onTable.has('salt')) record('refusesSalt');
-    if(onTable.has('oil'))  record('refusesOil');
+    recordProducts(onTable);
     hint('Готово. Отметки в блокноте обновились.');
   };
   return w;
@@ -314,7 +325,7 @@ CH.colors=()=>{
       return {react:got.length>0, picks};
     });
     showReactions(react);
-    if(onTable.has('teal')) record('favTeal');
+    if(onTable.has('teal')) recordChallenge('colors', g=>g.favTeal);
     hint('Готово. Отметки в блокноте обновились.');
   };
   return w;
@@ -339,7 +350,7 @@ CH.numbers=()=>{
       return {react:got.length>0, picks, bubble: got.length?null:'🤷‍♀️'};
     });
     showReactions(react);
-    if(set.has(11)) record('picksNum11');
+    if(set.has(11)) recordChallenge('numbers', g=>g.picksNum11);
     hint('Готово. Отметки в блокноте обновились.');
   };
   return w;
@@ -364,7 +375,7 @@ CH.toys=()=>{
       return {react:got.length>0, picks};
     });
     showReactions(react);
-    if(onTable.has('shark')) record('takesShark');
+    if(onTable.has('shark')) recordChallenge('toys', g=>g.takesShark);
     hint('Готово. Отметки в блокноте обновились.');
   };
   return w;
@@ -387,7 +398,7 @@ CH.text=()=>{
       return {react:laughs, bubble: laughs?'😂':null};
     });
     showReactions(react);
-    if(txt.includes('250')) record('laughs250');
+    if(txt.includes('250')) recordChallenge('text', g=>g.laughs250);
     hint('Готово. Отметки в блокноте обновились.');
   };
   btn.onclick=say;
@@ -399,18 +410,18 @@ CH.text=()=>{
 function buildNotebook(){
   const wrap=document.getElementById('nbWrap');
   const m=v=>v==='yes'?'<span class="mark yes">✓</span>':v==='no'?'<span class="mark no">✗</span>':'<span class="mark q">·</span>';
-  let html='<table class="nb"><tr><th>№</th>'+TRAITS.map(t=>'<th title="'+t.col+'">'+t.icon+'</th>').join('')+'</tr>';
+  let html='<table class="nb"><tr><th>№</th>'+CHALLENGES.map(c=>'<th title="'+c.col+'">'+c.icon+'</th>').join('')+'</tr>';
   state.girls.forEach((g,i)=>{
     const o=state.obs[i];
-    const dead=TRAITS.some(t=>o[t.key]==='no');
-    const allKnown=TRAITS.every(t=>o[t.key]!=='q');
-    const suspect=!dead && TRAITS.some(t=>o[t.key]==='yes');
+    const dead=CHALLENGES.some(c=>o[c.key]==='no');
+    const allKnown=CHALLENGES.every(c=>o[c.key]!=='q');
+    const suspect=!dead && CHALLENGES.some(c=>o[c.key]==='yes');
     const lone = suspect && allKnown;
     let cls=dead?'dead':(suspect?'suspect':'');
     if(state.over && i===state.s) cls+=' suspect';
     const crown = (lone||(state.over&&i===state.s)) ? ' 👑' : '';
     html+='<tr class="'+cls+'"><td class="gname">'+(i+1)+crown+'</td>';
-    TRAITS.forEach(t=>html+='<td>'+m(o[t.key])+'</td>');
+    CHALLENGES.forEach(c=>html+='<td>'+m(o[c.key])+'</td>');
     html+='</tr>';
   });
   html+='</table>';
@@ -422,8 +433,8 @@ document.getElementById('accuseBtn').onclick=()=>{
   if(state.over) return;
   state.accusing=!state.accusing;
   document.getElementById('stage').classList.toggle('accuse',state.accusing);
-  document.getElementById('accuseBtn').textContent=state.accusing?'Отмена':'Назвать S';
-  hint(state.accusing?'👉 Кликни по девушке, которую считаешь S.':'Продолжай испытания.');
+  document.getElementById('accuseBtn').textContent=state.accusing?'Отмена':'Назвать Gelin';
+  hint(state.accusing?'👉 Кликни по девушке, которую считаешь Gelin.':'Продолжай испытания.');
 };
 function onGirlClick(i){
   if(!state.accusing||state.over) return;
@@ -437,7 +448,7 @@ function onGirlClick(i){
     const b=document.createElement('div'); b.className='bubble'; b.textContent='не я!'; girlEl.appendChild(b);
     setTimeout(()=>b.remove(),1600);
     if(state.attempts<=0){ endGame(false,i); }
-    else{ hint('Мимо! Это не S. Осталось попыток: '+state.attempts+'. Проверь блокнот.'); }
+    else{ hint('Мимо! Это не Gelin. Осталось попыток: '+state.attempts+'. Проверь блокнот.'); }
   }
 }
 
@@ -448,16 +459,16 @@ function endGame(win,clicked){
   const box=document.getElementById('overlayBox');
   box.className='panel box '+(win?'win':'lose');
   if(win){
-    box.innerHTML=`<h2>🎉 Ты раскрыл S!</h2>
+    box.innerHTML=`<h2>🎉 Ты нашёл Gelin!</h2>
       <img src="assets/sprites/girl_portrait.png" alt="S">
-      <p>S пряталась под №${state.s+1}. Ты точно сопоставил все семь примет.</p>
+      <p>Gelin пряталась под №${state.s+1}. Ты правильно сопоставил все испытания.</p>
       <div style="display:flex;gap:10px;justify-content:center;margin-top:12px">
         <button class="btn" onclick="newGame()">Сыграть ещё</button>
         <a class="btn ghost" href="index.html">В меню</a></div>`;
   }else{
     box.innerHTML=`<h2>Эх, не угадал…</h2>
       <img src="assets/sprites/gameover.webp" alt="">
-      <p>Настоящая S была под <b>№${state.s+1}</b>. В блокноте видно: только у неё везде ✓.</p>
+      <p>Настоящая Gelin была под <b>№${state.s+1}</b>. В блокноте видно: только у неё везде ✓.</p>
       <div style="display:flex;gap:10px;justify-content:center;margin-top:12px">
         <button class="btn" onclick="newGame()">Ещё раз</button>
         <a class="btn ghost" href="index.html">В меню</a></div>`;
